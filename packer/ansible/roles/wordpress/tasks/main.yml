@@ -1,0 +1,49 @@
+---
+- name: Wordpress | Installation
+  get_url:
+     url=https://wordpress.org/wordpress-{{ wordpress_version }}.tar.gz
+     dest=/wordpress.tar.gz
+     checksum=md5:{{ wordpress_md5 }}
+     validate_certs=no # Alpine 3.3 doesn't recognize Godaddy's CA.
+
+- name: Wordpress | Unarchive
+  unarchive:
+     src=/wordpress.tar.gz
+     dest=/usr/share/nginx/html
+
+- name: Wordpress | Set permissions
+  file:
+     path=/usr/share/nginx/html/wordpress
+     owner=nginx
+     group=nginx
+     state=directory
+     recurse=yes
+
+- name: Wordpress | Copy entrypoint.sh
+  copy:
+     src=entrypoint.sh
+     dest=/
+     mode=777
+
+- name: Wordpress | Copy install-wp.sh
+  copy:
+     src=install-wp.sh
+     dest=/
+     mode=777
+
+- name: Wordpress | Remove wordpress.tar.gz
+  file:
+     path=/wordpress.tar.gz
+     state=absent
+
+- name: apk | Install curl
+  apk: 
+     name=curl
+     state=present 
+
+- name: apk | Remove cache
+  file: 
+     state=absent 
+     path={{ item }}
+  with_fileglob:
+     - /var/cache/apk/*

@@ -1,0 +1,32 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "image": "jfusterm/ansible",
+            "commit": true
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "ansible-local",
+            "playbook_dir": "ansible",
+            "playbook_file": "ansible/wordpress.yml"
+        }
+    ],
+    "post-processors": [
+        [
+            {
+                "type": "docker-tag",
+                "repository": "jfusterm/wp-packer",
+                "tag": "4.5"
+            },
+            {
+                "type": "docker-push",
+                "login": "true",
+                "login_username": "jfusterm",
+                "login_password": "",
+                "login_email": "joan.fuster@gmail.com"
+            }
+        ]
+    ]
+}

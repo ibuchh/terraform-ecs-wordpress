@@ -1,0 +1,11 @@
+---
+- name: PHP-FPM | Installation
+  apk:
+     name=php-fpm,php-mysql,php-opcache
+     state=present
+     update_cache=yes
+
+- name: PHP-FPM | Setting config file src=php-fpm.conf
+  template:
+     src=php-fpm.conf
+     dest=/etc/php

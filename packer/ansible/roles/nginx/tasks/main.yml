@@ -1,0 +1,16 @@
+---
+- name: Nginx | Installation
+  apk: 
+     name=nginx 
+     state=present 
+     update_cache=yes
+
+- name: Nginx | Setting config file nginx.conf
+  template: 
+     src=nginx.conf 
+     dest=/etc/nginx
+
+- name: Nginx | Setting config file wordpress.conf
+  template: 
+     src=wordpress.conf 
+     dest=/etc/nginx/conf.d
